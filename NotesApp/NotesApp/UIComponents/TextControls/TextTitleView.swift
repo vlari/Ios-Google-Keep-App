@@ -45,7 +45,6 @@ extension TextTitleView: UITextViewDelegate {
     func textViewDidEndEditing(_ textView: UITextView) {
         if self.text.isEmpty {
             self.text = textViewPlaceholder
-            self.textColor = UIColor.lightGray
         }
     }
 }

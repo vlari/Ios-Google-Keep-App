@@ -14,7 +14,14 @@ class ColorCollectionViewCell: UICollectionViewCell {
         self.layer.cornerRadius = 10
     }
     
-    func set(color: UIColor) {
-        layer.backgroundColor = color.cgColor
+    func set(color: NoteColor, selected: NoteColor) {
+        layer.backgroundColor = color.bgColor.cgColor
+//        if color.name == selected.name {
+//            self.layer.borderColor = UIColor.darkGray.cgColor
+//            self.layer.borderWidth = 2
+//        } else {
+//            self.layer.borderColor = nil
+//            self.layer.borderWidth = 0
+//        }
     }
 }

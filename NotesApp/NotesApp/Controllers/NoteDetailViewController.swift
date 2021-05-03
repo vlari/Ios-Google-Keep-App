@@ -8,45 +8,48 @@
 import UIKit
 
 class NoteDetailViewController: UIViewController {
+    var selectedNote: Note!
     let colorContainer = UIView()
     var titleTextView = TextTitleView(frame: .zero, textContainer: nil)
     var descriptionTextView = TextDescriptionView(frame: .zero, textContainer: nil)
-    var note: Note!
+    var selectedColor: NoteColor!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        view.backgroundColor = .systemTeal
+        configure()
+        addChildViews()
         configureSubViews()
         configureLayout()
     }
     
+    private func configure() {
+        selectedColor = selectedNote?.color ?? noteColors.first
+        view.backgroundColor = selectedColor.bgColor
+    }
+    
+    private func addChildViews() {
+        switchColor(to: selectedColor.bgColor)
+        
+        if let note = selectedNote {
+            titleTextView.text = note.title
+            descriptionTextView.text = note.textContent
+        }
+        
+        let childViews = [titleTextView, descriptionTextView, colorContainer]
+        
+        for viewItem in childViews {
+            view.addSubview(viewItem)
+            viewItem.translatesAutoresizingMaskIntoConstraints = false
+        }
+    }
+    
     private func configureSubViews() {
-        titleTextView.backgroundColor = .systemTeal
-        descriptionTextView.backgroundColor = .systemTeal
-        colorContainer.backgroundColor = .systemTeal
-       
-        view.addSubview(colorContainer)
-        view.addSubview(titleTextView)
-        view.addSubview(descriptionTextView)
-        
-        colorContainer.translatesAutoresizingMaskIntoConstraints = false
-        titleTextView.translatesAutoresizingMaskIntoConstraints = false
-        descriptionTextView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let colorCollectionVC = ColorCollectionViewController(color: note.color.bgColor)
+        let colorCollectionVC = ColorCollectionViewController(color:  selectedColor)
+        colorCollectionVC.colorDelegate = self
         add(colorCollectionVC, container: colorContainer)
     }
     
-    private func add(_ child: UIViewController, container parent: UIView) {
-        addChild(child)
-        parent.addSubview(child.view)
-        child.view.frame = parent.bounds
-        child.didMove(toParent: self)
-    }
-    
     private func configureLayout() {
-        
         NSLayoutConstraint.activate([
             colorContainer.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 12),
             colorContainer.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
@@ -58,7 +61,7 @@ class NoteDetailViewController: UIViewController {
             titleTextView.topAnchor.constraint(equalTo: colorContainer.bottomAnchor, constant: 16),
             titleTextView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
             titleTextView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
-//            titleTextView.heightAnchor.constraint(equalToConstant: 80)
+            //            titleTextView.heightAnchor.constraint(equalToConstant: 80)
         ])
         
         NSLayoutConstraint.activate([
@@ -68,5 +71,17 @@ class NoteDetailViewController: UIViewController {
             descriptionTextView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
+    
+    private func switchColor(to color: UIColor) {
+        titleTextView.backgroundColor = color
+        descriptionTextView.backgroundColor = color
+        colorContainer.backgroundColor = color
+    }
+}
 
+extension NoteDetailViewController: ColorCollectionViewDelegate {
+    func didSelectColor(color: NoteColor) {
+        view.backgroundColor = color.bgColor
+        switchColor(to: color.bgColor)
+    }
 }

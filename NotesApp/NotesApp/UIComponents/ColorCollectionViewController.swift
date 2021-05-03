@@ -7,33 +7,27 @@
 
 import UIKit
 
-class ColorCollectionViewController: UIViewController {
+protocol ColorCollectionViewDelegate: AnyObject {
+    func didSelectColor(color: NoteColor)
+}
 
-    private var noteColors: [NoteColor] = []
+class ColorCollectionViewController: UIViewController {
     private var colorCollectionView: UICollectionView!
+    weak var colorDelegate: ColorCollectionViewDelegate?
+    var selectedColor: NoteColor!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        noteColors = [
-            NoteColor(bgColor: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0), name: "Yellow"),
-            NoteColor(bgColor: UIColor(red: 167/255, green: 244/255, blue: 235/255, alpha: 1.0), name: "Light Blue"),
-            NoteColor(bgColor: UIColor(red: 225/255, green: 130/255, blue: 121/255, alpha: 1.0), name: "Red"),
-            NoteColor(bgColor: UIColor(red: 204/255, green: 255/255, blue: 144/255, alpha: 1.0), name: "Green"),
-            NoteColor(bgColor: UIColor(red: 232/255, green: 234/255, blue: 237/255, alpha: 1.0), name: "Light Purple"),
-            NoteColor(bgColor: UIColor(red: 215/255, green: 174/255, blue: 251/255, alpha: 1.0), name: "Purple"),
-            NoteColor(bgColor: UIColor(red: 251/255, green: 188/255, blue: 4/255, alpha: 1.0), name: "Orange"),
-            NoteColor(bgColor: UIColor(red: 253/255, green: 207/255, blue: 232/255, alpha: 1.0), name: "Pink"),
-            NoteColor(bgColor: UIColor(red: 203/255, green: 240/255, blue: 248/255, alpha: 1.0), name: "Blue"),
-        ]
         
         configureCollectionView()
         configureViewLayout()
     }
     
-    init(color: UIColor) {
+    init(color: NoteColor) {
         super.init(nibName: nil, bundle: nil)
-//        colorCollectionView.backgroundColor = color
-        print(color)
+        colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
+        colorCollectionView.backgroundColor = color.bgColor
+        selectedColor = color
     }
     
     required init?(coder: NSCoder) {
@@ -41,11 +35,9 @@ class ColorCollectionViewController: UIViewController {
     }
     
     private func configureCollectionView() {
-        colorCollectionView = UICollectionView(frame: .zero, collectionViewLayout: configureCollectionViewLayout())
         colorCollectionView.register(ColorCollectionViewCell.self, forCellWithReuseIdentifier: ColorCollectionViewCell.identifier)
         colorCollectionView.delegate = self
         colorCollectionView.dataSource = self
-        colorCollectionView.backgroundColor = .systemTeal
         view.addSubview(colorCollectionView)
         colorCollectionView.translatesAutoresizingMaskIntoConstraints = false
     }
@@ -87,7 +79,6 @@ class ColorCollectionViewController: UIViewController {
 
 // MARK: - Data Source
 extension ColorCollectionViewController: UICollectionViewDataSource {
-    
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
@@ -100,8 +91,8 @@ extension ColorCollectionViewController: UICollectionViewDataSource {
         guard let cell = colorCollectionView.dequeueReusableCell(withReuseIdentifier: ColorCollectionViewCell.identifier, for: indexPath)
         as? ColorCollectionViewCell else { return ColorCollectionViewCell() }
         
-        let noteColor = self.noteColors[indexPath.item]
-        cell.set(color: noteColor.bgColor)
+        let noteColor = noteColors[indexPath.item]
+        cell.set(color: noteColor, selected: selectedColor)
         
         return cell
     }
@@ -109,5 +100,33 @@ extension ColorCollectionViewController: UICollectionViewDataSource {
 
 // MARK: - Delegate
 extension ColorCollectionViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell {
+            let noteColor =  noteColors[indexPath.item]
+            colorCollectionView.backgroundColor = noteColor.bgColor
+            colorDelegate?.didSelectColor(color: noteColor)
+            cell.layer.borderColor = UIColor.darkGray.cgColor
+            cell.layer.borderWidth = 2
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
+        if let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell {
+            cell.layer.borderColor = nil
+            cell.layer.borderWidth = 0
+        }
+    }
     
 }
+
+var noteColors = [
+    NoteColor(bgColor: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0), name: "Yellow"),
+    NoteColor(bgColor: UIColor(red: 167/255, green: 244/255, blue: 235/255, alpha: 1.0), name: "Light Blue"),
+    NoteColor(bgColor: UIColor(red: 225/255, green: 130/255, blue: 121/255, alpha: 1.0), name: "Red"),
+    NoteColor(bgColor: UIColor(red: 204/255, green: 255/255, blue: 144/255, alpha: 1.0), name: "Green"),
+    NoteColor(bgColor: UIColor(red: 232/255, green: 234/255, blue: 237/255, alpha: 1.0), name: "Light Purple"),
+    NoteColor(bgColor: UIColor(red: 215/255, green: 174/255, blue: 251/255, alpha: 1.0), name: "Purple"),
+    NoteColor(bgColor: UIColor(red: 251/255, green: 188/255, blue: 4/255, alpha: 1.0), name: "Orange"),
+    NoteColor(bgColor: UIColor(red: 253/255, green: 207/255, blue: 232/255, alpha: 1.0), name: "Pink"),
+    NoteColor(bgColor: UIColor(red: 203/255, green: 240/255, blue: 248/255, alpha: 1.0), name: "Blue"),
+]

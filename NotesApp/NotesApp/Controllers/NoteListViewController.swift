@@ -8,26 +8,22 @@
 import UIKit
 
 class NoteListViewController: UIViewController {
-
-    var noteCollectionView: UICollectionView!
-    var dataSource: UICollectionViewDiffableDataSource<Section, Note>!
-    var testList: [Note] = []
-    
+    private var noteCollectionView: UICollectionView!
+    private var dataSource: UICollectionViewDiffableDataSource<Section, Note>!
+    let searchController = UISearchController()
+    var filteredNotes: [Note] = []
+    var isSearchBarEmpty: Bool {
+        return searchController.searchBar.text?.isEmpty ?? true
+    }
+    var isFiltering: Bool {
+        let isSearchBarFiltered = searchController.searchBar.selectedScopeButtonIndex != 0
+        return searchController.isActive && (!isSearchBarEmpty || isSearchBarFiltered)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
-        
-        testList = [
-            Note(id: UUID(),
-                 title: "Test One",
-                 textContent: "Text content herehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehere",
-                 color: NoteColor(bgColor: UIColor.blue, name: "Blue")),
-            Note(id: UUID(),
-                 title: "Test Two",
-                 textContent: "Text content here...",
-                 color: NoteColor(bgColor: UIColor.green, name: "Green"))
-        ]
+        configureSearchController()
         configureCollectionView()
         configureDataSource()
         applySnapshot(on: testList)
@@ -35,6 +31,13 @@ class NoteListViewController: UIViewController {
 
     private func configure() {
         view.backgroundColor = .systemBackground
+        title = "Quick Notes"
+        navigationController?.navigationBar.prefersLargeTitles = true
+    }
+    
+    @objc func didTapAddNote() {
+        let noteDetailVC = NoteDetailViewController()
+        navigationController?.pushViewController(noteDetailVC, animated: true)
     }
     
     private func configureCollectionView() {
@@ -74,18 +77,15 @@ class NoteListViewController: UIViewController {
     private func configureDataSource() {
         typealias ShapeDataSource = UICollectionViewDiffableDataSource<Section, Note>
         
-        dataSource = ShapeDataSource(collectionView: noteCollectionView) { [weak self] (collectionView: UICollectionView, indexPath: IndexPath, shape: Note) ->
+        dataSource = ShapeDataSource(collectionView: noteCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, note: Note) ->
             UICollectionViewCell? in
-            guard let self = self else { return nil }
-            
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoteCollectionViewCell.identifier, for: indexPath) as? NoteCollectionViewCell
             else {
                 return NoteCollectionViewCell()
             }
-            
-            let note = self.testList[indexPath.item]
+            let items = self.isFiltering && !self.filteredNotes.isEmpty ? self.filteredNotes : testList
+            let note = items[indexPath.item]
             cell.set(title: note.title, textContent: note.textContent, color: note.color.bgColor)
-//            cell.backgroundColor = .systemTeal
             
             return cell
         }
@@ -97,15 +97,50 @@ class NoteListViewController: UIViewController {
         currentSnapshot.appendItems(notes)
         dataSource.apply(currentSnapshot, animatingDifferences: true)
     }
+    
+    func configureSearchController() {
+        searchController.searchBar.placeholder = ""
+        searchController.searchBar.barTintColor = .white
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
+    }
+    
+    func filterNotes(text: String) {
+        filteredNotes = testList.filter { (note: Note) in
+            return note.title.lowercased().contains(text.lowercased()) ||
+                note.textContent.lowercased().contains(text.lowercased())
+        }
+        applySnapshot(on: filteredNotes)
+    }
 }
 
+// MARK: - Collection Delegate
 extension NoteListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        let note = testList[indexPath.item]
+        let itemList = isFiltering && !self.filteredNotes.isEmpty ? filteredNotes : testList
+        let note = itemList[indexPath.item]
         let noteDetailVC = NoteDetailViewController()
-        noteDetailVC.note = note
+        noteDetailVC.selectedNote = note
         navigationController?.pushViewController(noteDetailVC, animated: true)
+    }
+}
+
+// MARK: - SearchBar Delegate
+extension NoteListViewController: UISearchResultsUpdating, UISearchBarDelegate {
+    func updateSearchResults(for searchController: UISearchController) {
+        guard let searchText = searchController.searchBar.text,
+              !searchText.isEmpty else {
+            applySnapshot(on: testList)
+            return
+        }
+        filterNotes(text: searchText)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        applySnapshot(on: testList)
     }
 }
 
@@ -137,3 +172,14 @@ struct NoteColor: Hashable {
 enum Section {
     case mainSection
 }
+
+var testList = [
+    Note(id: UUID(),
+         title: "Test One",
+         textContent: "Text content herehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehere",
+         color: NoteColor(bgColor: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0), name: "Yellow")),
+    Note(id: UUID(),
+         title: "Test Two",
+         textContent: "Text content here...",
+         color: NoteColor(bgColor: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0), name: "Yellow"))
+]
