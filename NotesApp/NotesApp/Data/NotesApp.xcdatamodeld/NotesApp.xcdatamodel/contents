@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="17192" systemVersion="19H2" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="NoteEntity" representedClassName="NoteEntity" syncable="YES">
+        <attribute name="color" attributeType="String" valueTransformerName="NSSecureCoding"/>
+        <attribute name="createdAt" attributeType="Date" defaultDateTimeInterval="641836920" usesScalarValueType="NO"/>
+        <attribute name="textContent" attributeType="String"/>
+        <attribute name="title" attributeType="String"/>
+        <relationship name="tags" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="TagEntity" inverseName="notes" inverseEntity="TagEntity"/>
+    </entity>
+    <entity name="TagEntity" representedClassName="TagEntity" syncable="YES">
+        <attribute name="name" attributeType="String"/>
+        <relationship name="notes" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="NoteEntity" inverseName="tags" inverseEntity="NoteEntity"/>
+    </entity>
+    <elements>
+        <element name="NoteEntity" positionX="-63" positionY="-18" width="128" height="118"/>
+        <element name="TagEntity" positionX="-54" positionY="27" width="128" height="73"/>
+    </elements>
+</model>

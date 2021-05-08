@@ -85,7 +85,7 @@ class NoteListViewController: UIViewController {
             }
             let items = self.isFiltering && !self.filteredNotes.isEmpty ? self.filteredNotes : testList
             let note = items[indexPath.item]
-            cell.set(title: note.title, textContent: note.textContent, color: note.color.bgColor)
+            cell.set(title: note.title, textContent: note.textContent, color: note.color)
             
             return cell
         }
@@ -148,7 +148,7 @@ struct Note: Hashable {
     var id = UUID()
     var title: String
     var textContent: String
-    var color: NoteColor
+    var color: UIColor
     
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
@@ -159,15 +159,15 @@ struct Note: Hashable {
     }
 }
 
-struct NoteColor: Hashable {
-    var id = UUID()
-    var bgColor: UIColor
-    var name: String
-    
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
+//struct NoteColor: Hashable {
+//    var id = UUID()
+//    var bgColor: UIColor
+//    var name: String
+//
+//    func hash(into hasher: inout Hasher) {
+//        hasher.combine(id)
+//    }
+//}
 
 enum Section {
     case mainSection
@@ -177,9 +177,9 @@ var testList = [
     Note(id: UUID(),
          title: "Test One",
          textContent: "Text content herehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehere",
-         color: NoteColor(bgColor: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0), name: "Yellow")),
+         color: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0)),
     Note(id: UUID(),
          title: "Test Two",
          textContent: "Text content here...",
-         color: NoteColor(bgColor: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0), name: "Yellow"))
+         color: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0))
 ]

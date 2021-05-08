@@ -17,6 +17,7 @@ class NavBarViewController: UIViewController {
     private let tableView: UITableView = {
         let table = UITableView()
         table.backgroundColor = .systemBackground
+        table.separatorStyle = .none
         table.register(UITableViewCell.self, forCellReuseIdentifier: "navItemCell")
         return table
     }()
@@ -68,6 +69,7 @@ class NavBarViewController: UIViewController {
 
 }
 
+// MARK: - TableView Delegate
 extension NavBarViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return NavMenuItems.allCases.count

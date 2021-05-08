@@ -12,7 +12,7 @@ class NoteDetailViewController: UIViewController {
     let colorContainer = UIView()
     var titleTextView = TextTitleView(frame: .zero, textContainer: nil)
     var descriptionTextView = TextDescriptionView(frame: .zero, textContainer: nil)
-    var selectedColor: NoteColor!
+    var selectedColor: UIColor!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,11 +24,11 @@ class NoteDetailViewController: UIViewController {
     
     private func configure() {
         selectedColor = selectedNote?.color ?? noteColors.first
-        view.backgroundColor = selectedColor.bgColor
+        view.backgroundColor = selectedColor
     }
     
     private func addChildViews() {
-        switchColor(to: selectedColor.bgColor)
+        switchColor(to: selectedColor)
         
         if let note = selectedNote {
             titleTextView.text = note.title
@@ -80,8 +80,8 @@ class NoteDetailViewController: UIViewController {
 }
 
 extension NoteDetailViewController: ColorCollectionViewDelegate {
-    func didSelectColor(color: NoteColor) {
-        view.backgroundColor = color.bgColor
-        switchColor(to: color.bgColor)
+    func didSelectColor(color: UIColor) {
+        view.backgroundColor = color
+        switchColor(to: color)
     }
 }

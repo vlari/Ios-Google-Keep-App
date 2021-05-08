@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8312A5EE263D8C04004CF948 /* TagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8312A5ED263D8C04004CF948 /* TagViewController.swift */; };
+		8312A5EE263D8C04004CF948 /* TagListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8312A5ED263D8C04004CF948 /* TagListViewController.swift */; };
 		8312A5FB263D8DD7004CF948 /* TagTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8312A5FA263D8DD7004CF948 /* TagTableViewCell.swift */; };
 		83187629263C6A160030A2D5 /* TextDescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83187628263C6A160030A2D5 /* TextDescriptionView.swift */; };
 		8318762E263C6A270030A2D5 /* TextTitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8318762D263C6A270030A2D5 /* TextTitleView.swift */; };
@@ -16,6 +16,7 @@
 		831D6020263B723A00B6111F /* NoteDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D601F263B723A00B6111F /* NoteDetailViewController.swift */; };
 		831D6025263B762300B6111F /* ColorCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D6024263B762300B6111F /* ColorCollectionViewController.swift */; };
 		831D602B263B7A2500B6111F /* ColorCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831D602A263B7A2500B6111F /* ColorCollectionViewCell.swift */; };
+		831F3A7926432897006F5864 /* AddTagViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831F3A7826432897006F5864 /* AddTagViewController.swift */; };
 		83309DFD263CA54D004E3600 /* UIViewControllerExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83309DFC263CA54D004E3600 /* UIViewControllerExtension.swift */; };
 		83494442263B432D004751DD /* CustomLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83494441263B432D004751DD /* CustomLabel.swift */; };
 		83494448263B4730004751DD /* CustomStyledLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83494447263B4730004751DD /* CustomStyledLabel.swift */; };
@@ -29,6 +30,10 @@
 		83550C4E263A39790054496E /* NotesAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83550C4D263A39790054496E /* NotesAppUITests.swift */; };
 		83550C66263A3ACD0054496E /* NoteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83550C65263A3ACD0054496E /* NoteListViewController.swift */; };
 		83550C73263A41FC0054496E /* NoteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83550C72263A41FC0054496E /* NoteCollectionViewCell.swift */; };
+		83B13D6A2642EB8200F266F8 /* TagEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B13D662642EB8200F266F8 /* TagEntity+CoreDataClass.swift */; };
+		83B13D6B2642EB8200F266F8 /* TagEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B13D672642EB8200F266F8 /* TagEntity+CoreDataProperties.swift */; };
+		83B13D6C2642EB8200F266F8 /* NoteEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B13D682642EB8200F266F8 /* NoteEntity+CoreDataClass.swift */; };
+		83B13D6D2642EB8200F266F8 /* NoteEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B13D692642EB8200F266F8 /* NoteEntity+CoreDataProperties.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +54,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		8312A5ED263D8C04004CF948 /* TagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagViewController.swift; sourceTree = "<group>"; };
+		8312A5ED263D8C04004CF948 /* TagListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListViewController.swift; sourceTree = "<group>"; };
 		8312A5FA263D8DD7004CF948 /* TagTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagTableViewCell.swift; sourceTree = "<group>"; };
 		83187628263C6A160030A2D5 /* TextDescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextDescriptionView.swift; sourceTree = "<group>"; };
 		8318762D263C6A270030A2D5 /* TextTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextTitleView.swift; sourceTree = "<group>"; };
@@ -58,6 +63,7 @@
 		831D601F263B723A00B6111F /* NoteDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteDetailViewController.swift; sourceTree = "<group>"; };
 		831D6024263B762300B6111F /* ColorCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionViewController.swift; sourceTree = "<group>"; };
 		831D602A263B7A2500B6111F /* ColorCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorCollectionViewCell.swift; sourceTree = "<group>"; };
+		831F3A7826432897006F5864 /* AddTagViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTagViewController.swift; sourceTree = "<group>"; };
 		83309DFC263CA54D004E3600 /* UIViewControllerExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewControllerExtension.swift; sourceTree = "<group>"; };
 		83494441263B432D004751DD /* CustomLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomLabel.swift; sourceTree = "<group>"; };
 		83494447263B4730004751DD /* CustomStyledLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStyledLabel.swift; sourceTree = "<group>"; };
@@ -77,6 +83,10 @@
 		83550C4F263A39790054496E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83550C65263A3ACD0054496E /* NoteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListViewController.swift; sourceTree = "<group>"; };
 		83550C72263A41FC0054496E /* NoteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCollectionViewCell.swift; sourceTree = "<group>"; };
+		83B13D662642EB8200F266F8 /* TagEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TagEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		83B13D672642EB8200F266F8 /* TagEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TagEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		83B13D682642EB8200F266F8 /* NoteEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
+		83B13D692642EB8200F266F8 /* NoteEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +173,7 @@
 		83550C27263A39780054496E /* NotesApp */ = {
 			isa = PBXGroup;
 			children = (
+				83B13D622642EB5900F266F8 /* Data */,
 				83309DFB263CA535004E3600 /* Extension */,
 				83550C71263A41CB0054496E /* UIComponents */,
 				83550C6D263A3D8F0054496E /* Models */,
@@ -172,7 +183,6 @@
 				83550C34263A39790054496E /* Assets.xcassets */,
 				83550C36263A39790054496E /* LaunchScreen.storyboard */,
 				83550C39263A39790054496E /* Info.plist */,
-				83550C31263A39780054496E /* NotesApp.xcdatamodeld */,
 			);
 			path = NotesApp;
 			sourceTree = "<group>";
@@ -200,10 +210,11 @@
 			children = (
 				83550C65263A3ACD0054496E /* NoteListViewController.swift */,
 				831D601F263B723A00B6111F /* NoteDetailViewController.swift */,
-				8312A5ED263D8C04004CF948 /* TagViewController.swift */,
+				8312A5ED263D8C04004CF948 /* TagListViewController.swift */,
 				8318EF94263EE6E6000507C1 /* MainViewController.swift */,
 				8318EF99263EE790000507C1 /* NavBarViewController.swift */,
 				834EC1EC263F3FD4004D2B46 /* HomeViewController.swift */,
+				831F3A7826432897006F5864 /* AddTagViewController.swift */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -224,6 +235,18 @@
 				831D6024263B762300B6111F /* ColorCollectionViewController.swift */,
 			);
 			path = UIComponents;
+			sourceTree = "<group>";
+		};
+		83B13D622642EB5900F266F8 /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				83B13D662642EB8200F266F8 /* TagEntity+CoreDataClass.swift */,
+				83B13D672642EB8200F266F8 /* TagEntity+CoreDataProperties.swift */,
+				83B13D682642EB8200F266F8 /* NoteEntity+CoreDataClass.swift */,
+				83B13D692642EB8200F266F8 /* NoteEntity+CoreDataProperties.swift */,
+				83550C31263A39780054496E /* NotesApp.xcdatamodeld */,
+			);
+			path = Data;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -361,6 +384,7 @@
 				831D6020263B723A00B6111F /* NoteDetailViewController.swift in Sources */,
 				83494442263B432D004751DD /* CustomLabel.swift in Sources */,
 				834EC1ED263F3FD4004D2B46 /* HomeViewController.swift in Sources */,
+				83B13D6C2642EB8200F266F8 /* NoteEntity+CoreDataClass.swift in Sources */,
 				8318762E263C6A270030A2D5 /* TextTitleView.swift in Sources */,
 				83494448263B4730004751DD /* CustomStyledLabel.swift in Sources */,
 				8318EF95263EE6E6000507C1 /* MainViewController.swift in Sources */,
@@ -370,9 +394,13 @@
 				83550C2B263A39780054496E /* SceneDelegate.swift in Sources */,
 				8318EF9A263EE790000507C1 /* NavBarViewController.swift in Sources */,
 				8312A5FB263D8DD7004CF948 /* TagTableViewCell.swift in Sources */,
+				83B13D6D2642EB8200F266F8 /* NoteEntity+CoreDataProperties.swift in Sources */,
 				831D6025263B762300B6111F /* ColorCollectionViewController.swift in Sources */,
 				83550C33263A39780054496E /* NotesApp.xcdatamodeld in Sources */,
-				8312A5EE263D8C04004CF948 /* TagViewController.swift in Sources */,
+				831F3A7926432897006F5864 /* AddTagViewController.swift in Sources */,
+				83B13D6B2642EB8200F266F8 /* TagEntity+CoreDataProperties.swift in Sources */,
+				83B13D6A2642EB8200F266F8 /* TagEntity+CoreDataClass.swift in Sources */,
+				8312A5EE263D8C04004CF948 /* TagListViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -6,14 +6,16 @@
 //
 
 import UIKit
+import CoreData
 
 class MainViewController: UIViewController {
     let navBarVC = NavBarViewController()
     let noteListVC = NoteListViewController()
     let homeVC = HomeViewController()
-    lazy var tagVC = TagViewController()
+    lazy var tagVC = TagListViewController()
     var navVC: UINavigationController?
     var currentVC: UIViewController?
+    var managedContext: NSManagedObjectContext?
     
     
     
@@ -34,7 +36,6 @@ class MainViewController: UIViewController {
         add(navVC, container: view)
         self.navVC = navVC
         
-//        addBaseView(child: noteListVC)
         setDisplayedView(menuItem: .noteList)
     }
     
@@ -50,7 +51,10 @@ class MainViewController: UIViewController {
             let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddNote))
             homeVC.navigationItem.rightBarButtonItem = addButton
         case .tags:
+            tagVC.managedContext = self.managedContext
             addBaseView(child: tagVC)
+            let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddTag))
+            homeVC.navigationItem.rightBarButtonItem = addButton
         }
     }
     
@@ -59,8 +63,16 @@ class MainViewController: UIViewController {
         homeVC.navigationController?.pushViewController(noteDetailVC, animated: true)
     }
     
+    @objc func didTapAddTag() {
+        let addTagVC = AddTagViewController()
+        addTagVC.manageContext = self.managedContext
+        let navController = UINavigationController(rootViewController: addTagVC)
+        present(navController, animated: true)
+    }
+    
 }
 
+// MARK: - Home Delegate
 extension MainViewController: HomeViewControllerDelegate {
     func didTapNavMenu() {
         toggleMenu(completion: nil)
@@ -92,6 +104,7 @@ extension MainViewController: HomeViewControllerDelegate {
     }
 }
 
+// MARK: - Navbar Delegate
 extension MainViewController: NavBarViewControllerDelegate {
     func didSelectNavItem(menuItem: NavBarViewController.NavMenuItems) {
         toggleMenu(completion: nil)

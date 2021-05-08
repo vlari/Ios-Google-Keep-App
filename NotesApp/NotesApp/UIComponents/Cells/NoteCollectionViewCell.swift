@@ -25,7 +25,7 @@ class NoteCollectionViewCell: UICollectionViewCell {
     override func layoutSubviews() {
         self.layer.cornerRadius = 10
         self.layer.borderWidth = 2
-        self.layer.borderColor = UIColor.systemGray.cgColor
+        self.layer.borderColor = UIColor.systemBackground.cgColor
     }
     
     func set(title: String, textContent: String, color: UIColor) {
