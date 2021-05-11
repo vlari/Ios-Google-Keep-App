@@ -9,8 +9,8 @@ import UIKit
 import CoreData
 
 class AddTagViewController: UIViewController {
-    var manageContext: NSManagedObjectContext!
-    var tagLabel = CustomStyledLabel(textAlign: .left, style: .title2, color: .label)
+    var managedContext: NSManagedObjectContext!
+    var tagLabel = CustomStyledLabel(textAlign: .left, style: .title1, color: .label)
     var tagField = UITextField()
     
     override func viewDidLoad() {
@@ -28,8 +28,6 @@ class AddTagViewController: UIViewController {
             case .success(let isTagSaved):
                 if isTagSaved {
                     print("saved")
-                } else {
-                    print("error saved")
                 }
             case .failure(let error):
                 print("error \(error)")
@@ -39,7 +37,6 @@ class AddTagViewController: UIViewController {
     }
     
     private func configure() {
-        title = "Add Tag"
         view.backgroundColor = .systemBackground
         let doneButton = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(didTapDismiss))
         navigationItem.rightBarButtonItem?.tintColor = UIColor(red: 241/255, green: 100/255, blue: 100/255, alpha: 1.0)
@@ -50,12 +47,13 @@ class AddTagViewController: UIViewController {
         view.addSubview(tagLabel)
         view.addSubview(tagField)
         
-        tagLabel.text = "Name"
+        tagLabel.text = "Add a Tag"
         tagField.font = UIFont.preferredFont(forTextStyle: .title2)
         tagField.backgroundColor = .white
         tagField.layer.borderWidth = 1.0
         tagField.layer.borderColor = UIColor.systemGray.cgColor
         tagField.layer.cornerRadius = 10
+        tagField.textAlignment = .center
         
         tagLabel.translatesAutoresizingMaskIntoConstraints = false
         tagField.translatesAutoresizingMaskIntoConstraints = false
@@ -63,15 +61,15 @@ class AddTagViewController: UIViewController {
         NSLayoutConstraint.activate([
             tagLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 48),
             tagLabel.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 12),
-            tagLabel.widthAnchor.constraint(equalToConstant: 64),
+            tagLabel.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
             tagLabel.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         NSLayoutConstraint.activate([
-            tagField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 48),
-            tagField.leadingAnchor.constraint(equalTo: tagLabel.trailingAnchor, constant: 12),
-            tagField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -12),
-            tagField.bottomAnchor.constraint(equalTo: tagLabel.bottomAnchor)
+            tagField.topAnchor.constraint(equalTo: tagLabel.bottomAnchor, constant: 40),
+            tagField.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 20),
+            tagField.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            tagField.heightAnchor.constraint(equalToConstant: 40)
         ])
     }
     
@@ -82,13 +80,13 @@ class AddTagViewController: UIViewController {
     private func saveTag(completion: @escaping (Result<Bool, Error>) -> ()) {
         guard let field = tagField.text,
               !field.isEmpty else { return }
-        guard let entity = NSEntityDescription.entity(forEntityName: "TagEntity", in: manageContext) else { return }
+        guard let entity = NSEntityDescription.entity(forEntityName: "TagEntity", in: managedContext) else { return }
         
-        let tag = TagEntity(entity: entity, insertInto: manageContext)
+        let tag = TagEntity(entity: entity, insertInto: managedContext)
         tag.name = field
         
         do {
-            try manageContext.save()
+            try managedContext.save()
             completion(.success(true))
         } catch let error as NSError {
             completion(.failure(error))

@@ -28,10 +28,14 @@ class NoteCollectionViewCell: UICollectionViewCell {
         self.layer.borderColor = UIColor.systemBackground.cgColor
     }
     
-    func set(title: String, textContent: String, color: UIColor) {
-        self.title.text = title
-        self.textContent.text = textContent
-        self.backgroundColor = color
+    func set(title: String?, textContent: String?, color: String?) {
+        self.title.text = title ?? ""
+        self.textContent.text = textContent ?? ""
+        if let color = color {
+            self.backgroundColor = UIColor(hex: color)
+        } else {
+            self.backgroundColor = UIColor.NoteColor.yellow
+        }
     }
     
     private func configureLayout() {

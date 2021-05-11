@@ -116,7 +116,6 @@ extension ColorCollectionViewController: UICollectionViewDelegate {
             cell.layer.borderWidth = 0
         }
     }
-    
 }
 
 var noteColors = [

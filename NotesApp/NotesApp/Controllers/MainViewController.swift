@@ -17,8 +17,6 @@ class MainViewController: UIViewController {
     var currentVC: UIViewController?
     var managedContext: NSManagedObjectContext?
     
-    
-    
     private var menuState: NavMenuState = .closed
     
     override func viewDidLoad() {
@@ -47,6 +45,7 @@ class MainViewController: UIViewController {
     func setDisplayedView(menuItem: NavBarViewController.NavMenuItems) {
         switch menuItem {
         case .noteList:
+            noteListVC.managedContext = self.managedContext
             addBaseView(child: noteListVC)
             let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddNote))
             homeVC.navigationItem.rightBarButtonItem = addButton
@@ -60,16 +59,16 @@ class MainViewController: UIViewController {
     
     @objc func didTapAddNote() {
         let noteDetailVC = NoteDetailViewController()
+        noteDetailVC.managedContext = self.managedContext
         homeVC.navigationController?.pushViewController(noteDetailVC, animated: true)
     }
     
     @objc func didTapAddTag() {
         let addTagVC = AddTagViewController()
-        addTagVC.manageContext = self.managedContext
+        addTagVC.managedContext = self.managedContext
         let navController = UINavigationController(rootViewController: addTagVC)
         present(navController, animated: true)
     }
-    
 }
 
 // MARK: - Home Delegate

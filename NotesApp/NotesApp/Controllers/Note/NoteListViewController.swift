@@ -6,19 +6,33 @@
 //
 
 import UIKit
+import CoreData
 
 class NoteListViewController: UIViewController {
+    var managedContext: NSManagedObjectContext!
     private var noteCollectionView: UICollectionView!
-    private var dataSource: UICollectionViewDiffableDataSource<Section, Note>!
+    private var dataSource: UICollectionViewDiffableDataSource<NoteSection, NoteEntity>!
     let searchController = UISearchController()
-    var filteredNotes: [Note] = []
-    var isSearchBarEmpty: Bool {
-        return searchController.searchBar.text?.isEmpty ?? true
-    }
-    var isFiltering: Bool {
-        let isSearchBarFiltered = searchController.searchBar.selectedScopeButtonIndex != 0
-        return searchController.isActive && (!isSearchBarEmpty || isSearchBarFiltered)
-    }
+    var searchedText: String = ""
+    lazy var fetchedResultsController: NSFetchedResultsController<NoteEntity> = {
+        let fetchRequest: NSFetchRequest<NoteEntity> = NoteEntity.fetchRequest()
+        let nameSort = NSSortDescriptor(key: #keyPath(NoteEntity.createdAt), ascending: true)
+        fetchRequest.sortDescriptors = [nameSort]
+        fetchRequest.fetchBatchSize = 20
+        
+        if !searchedText.isEmpty {
+            fetchRequest.predicate = NSPredicate(format: "name CONTAINS[c] %@ OR name CONTAINS[c] %@", searchedText)
+        }
+        
+        let fetchedResultsController = NSFetchedResultsController(
+            fetchRequest: fetchRequest,
+            managedObjectContext: managedContext,
+            sectionNameKeyPath: nil,
+            cacheName: nil)
+        
+        fetchedResultsController.delegate = self
+        return fetchedResultsController
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,7 +40,14 @@ class NoteListViewController: UIViewController {
         configureSearchController()
         configureCollectionView()
         configureDataSource()
-        applySnapshot(on: testList)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIView.performWithoutAnimation {
+            fetchNotes()
+        }
     }
 
     private func configure() {
@@ -75,27 +96,27 @@ class NoteListViewController: UIViewController {
     }
     
     private func configureDataSource() {
-        typealias ShapeDataSource = UICollectionViewDiffableDataSource<Section, Note>
+        typealias NoteDataSource = UICollectionViewDiffableDataSource<NoteSection, NoteEntity>
         
-        dataSource = ShapeDataSource(collectionView: noteCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, note: Note) ->
+        dataSource = NoteDataSource(collectionView: noteCollectionView) { (collectionView: UICollectionView, indexPath: IndexPath, note: NoteEntity) ->
             UICollectionViewCell? in
+            
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: NoteCollectionViewCell.identifier, for: indexPath) as? NoteCollectionViewCell
             else {
                 return NoteCollectionViewCell()
             }
-            let items = self.isFiltering && !self.filteredNotes.isEmpty ? self.filteredNotes : testList
-            let note = items[indexPath.item]
+            
             cell.set(title: note.title, textContent: note.textContent, color: note.color)
             
             return cell
         }
     }
     
-    private func applySnapshot(on notes: [Note]) {
-        var currentSnapshot = NSDiffableDataSourceSnapshot<Section, Note>()
+    private func applySnapshot() {
+        var currentSnapshot = NSDiffableDataSourceSnapshot<NoteSection, NoteEntity>()
         currentSnapshot.appendSections([.mainSection])
-        currentSnapshot.appendItems(notes)
-        dataSource.apply(currentSnapshot, animatingDifferences: true)
+        currentSnapshot.appendItems(fetchedResultsController.fetchedObjects ?? [])
+        dataSource.apply(currentSnapshot)
     }
     
     func configureSearchController() {
@@ -108,22 +129,23 @@ class NoteListViewController: UIViewController {
         navigationItem.hidesSearchBarWhenScrolling = false
     }
     
-    func filterNotes(text: String) {
-        filteredNotes = testList.filter { (note: Note) in
-            return note.title.lowercased().contains(text.lowercased()) ||
-                note.textContent.lowercased().contains(text.lowercased())
+    private func fetchNotes() {
+        do {
+            try fetchedResultsController.performFetch()
+        } catch let error as NSError {
+            print("error \(error)")
         }
-        applySnapshot(on: filteredNotes)
     }
 }
 
 // MARK: - Collection Delegate
 extension NoteListViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let itemList = isFiltering && !self.filteredNotes.isEmpty ? filteredNotes : testList
-        let note = itemList[indexPath.item]
+        guard let note = dataSource.itemIdentifier(for: indexPath) else { return }
         let noteDetailVC = NoteDetailViewController()
+        noteDetailVC.managedContext = managedContext
         noteDetailVC.selectedNote = note
+        noteDetailVC.isEditMode = true
         navigationController?.pushViewController(noteDetailVC, animated: true)
     }
 }
@@ -133,14 +155,21 @@ extension NoteListViewController: UISearchResultsUpdating, UISearchBarDelegate {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text,
               !searchText.isEmpty else {
-            applySnapshot(on: testList)
             return
         }
-        filterNotes(text: searchText)
+        searchedText = searchText
+        fetchNotes()
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        applySnapshot(on: testList)
+        fetchNotes()
+    }
+}
+
+// MARK: - NSFetchedResultsController Delegate
+extension NoteListViewController: NSFetchedResultsControllerDelegate {
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
+        applySnapshot()
     }
 }
 
@@ -159,27 +188,6 @@ struct Note: Hashable {
     }
 }
 
-//struct NoteColor: Hashable {
-//    var id = UUID()
-//    var bgColor: UIColor
-//    var name: String
-//
-//    func hash(into hasher: inout Hasher) {
-//        hasher.combine(id)
-//    }
-//}
-
-enum Section {
+enum NoteSection {
     case mainSection
 }
-
-var testList = [
-    Note(id: UUID(),
-         title: "Test One",
-         textContent: "Text content herehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehereherehere",
-         color: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0)),
-    Note(id: UUID(),
-         title: "Test Two",
-         textContent: "Text content here...",
-         color: UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0))
-]

@@ -25,10 +25,11 @@ class NavBarViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(tableView)
-//        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
         view.backgroundColor = .systemBackground
+        configureTableViewLayout()
     }
     
     override func viewDidLayoutSubviews() {
@@ -66,7 +67,6 @@ class NavBarViewController: UIViewController {
             }
         }
     }
-
 }
 
 // MARK: - TableView Delegate
