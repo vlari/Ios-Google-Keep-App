@@ -18,7 +18,6 @@ class ColorCollectionViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureCollectionView()
         configureViewLayout()
     }
@@ -101,19 +100,10 @@ extension ColorCollectionViewController: UICollectionViewDataSource {
 // MARK: - Delegate
 extension ColorCollectionViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell {
+        if let _ = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell {
             let noteColor =  noteColors[indexPath.item]
             colorCollectionView.backgroundColor = noteColor
             colorDelegate?.didSelectColor(color: noteColor)
-            cell.layer.borderColor = UIColor.darkGray.cgColor
-            cell.layer.borderWidth = 2
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
-        if let cell = collectionView.cellForItem(at: indexPath) as? ColorCollectionViewCell {
-            cell.layer.borderColor = nil
-            cell.layer.borderWidth = 0
         }
     }
 }

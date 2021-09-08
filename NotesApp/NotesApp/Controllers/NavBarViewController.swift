@@ -16,7 +16,7 @@ class NavBarViewController: UIViewController {
 
     private let tableView: UITableView = {
         let table = UITableView()
-        table.backgroundColor = .systemBackground
+        table.backgroundColor = .darkGray
         table.separatorStyle = .none
         table.register(UITableViewCell.self, forCellReuseIdentifier: "navItemCell")
         return table
@@ -28,7 +28,7 @@ class NavBarViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .darkGray
         configureTableViewLayout()
     }
     
@@ -42,7 +42,7 @@ class NavBarViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .darkGray
     }
     
     private func configureTableViewLayout() {
@@ -56,14 +56,14 @@ class NavBarViewController: UIViewController {
     
     enum NavMenuItems: String, CaseIterable {
         case noteList = "Notes"
-        case tags = "Tags"
+        case settings = "Settings"
         
         var navItemIcon: String {
             switch self {
             case .noteList:
                 return "note.text"
-            case .tags:
-                return "tag"
+            case .settings:
+                return "gearshape"
             }
         }
     }
@@ -78,11 +78,11 @@ extension NavBarViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "navItemCell", for: indexPath)
         cell.textLabel?.text = NavMenuItems.allCases[indexPath.row].rawValue
-        cell.textLabel?.textColor = UIColor(red: 241/255, green: 100/255, blue: 100/255, alpha: 1.0)
-        cell.backgroundColor = .systemBackground
-        cell.contentView.backgroundColor = .systemBackground
+        cell.textLabel?.textColor =  UIColor(hex: "#fad0c9")
+        cell.backgroundColor = .darkGray
+        cell.contentView.backgroundColor = .darkGray
         cell.imageView?.image = UIImage(systemName: NavMenuItems.allCases[indexPath.row].navItemIcon)
-        cell.imageView?.tintColor = UIColor(red: 241/255, green: 100/255, blue: 100/255, alpha: 1.0)
+        cell.imageView?.tintColor = UIColor(hex: "#fad0c9")
         return cell
     }
     

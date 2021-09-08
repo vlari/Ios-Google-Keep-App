@@ -8,72 +8,34 @@
 import UIKit
 import CoreData
 
+protocol TagListViewDelegate: AnyObject {
+    func didUpdateTagList(tagList: [Tag])
+}
+
 class TagListViewController: UIViewController {
     var managedContext: NSManagedObjectContext!
     private var tagTableView = UITableView()
     private var dataSource: TagDataSource!
+    var tags = [Tag]()
     
-    lazy var fetchedResultsController: NSFetchedResultsController<TagEntity> = {
-        let fetchRequest: NSFetchRequest<TagEntity> = TagEntity.fetchRequest()
-        let nameSort = NSSortDescriptor(key: #keyPath(TagEntity.name), ascending: true)
-        fetchRequest.sortDescriptors = [nameSort]
-        
-        let fetchedResultsController = NSFetchedResultsController(
-            fetchRequest: fetchRequest,
-            managedObjectContext: managedContext,
-            sectionNameKeyPath: nil,
-            cacheName: nil)
-        
-        fetchedResultsController.delegate = self
-        return fetchedResultsController
-    }()
+    weak var tagListDelegate: TagListViewDelegate?
     
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configure()
         configureTableView()
         configureDataSource()
-        configureLayout()
+        applySnapshot()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        UIView.performWithoutAnimation {
-            do {
-                try fetchedResultsController.performFetch()
-            } catch let error as NSError {
-                print("error \(error)")
-            }
-        }
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        tagListDelegate?.didUpdateTagList(tagList: tags)
     }
     
-    func configure() {
-        view.backgroundColor = .systemBackground
-        title = "Tags"
-    }
-    
-    func configureTableView() {
-        view.addSubview(tagTableView)
-        tagTableView.delegate = self
-        tagTableView.translatesAutoresizingMaskIntoConstraints = false
-        tagTableView.rowHeight = 100
-        tagTableView.register(TagTableViewCell.self, forCellReuseIdentifier: TagTableViewCell.identifier)
-    }
-    
-    func configureDataSource() {
-        dataSource = TagDataSource(tableView: tagTableView) { (tableView: UITableView, indexPath: IndexPath, tag: TagEntity) ->
-            UITableViewCell? in
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: TagTableViewCell.identifier, for: indexPath) as? TagTableViewCell
-            else {
-                return TagTableViewCell()
-            }
-            cell.set(tag: tag.name ?? "")
-            return cell
-        }
-    }
-    
-    func configureLayout() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         NSLayoutConstraint.activate([
             tagTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tagTableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -82,10 +44,39 @@ class TagListViewController: UIViewController {
         ])
     }
     
+    func configure() {
+        view.backgroundColor = .systemBackground
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .close, target: self, action: #selector(didTapClose))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(didTapAddTag))
+    }
+    
+    func configureTableView() {
+        view.addSubview(tagTableView)
+        tagTableView.delegate = self
+        tagTableView.translatesAutoresizingMaskIntoConstraints = false
+        tagTableView.rowHeight = 100
+        tagTableView.register(UITableViewCell.self, forCellReuseIdentifier: "tagCell")
+    }
+    
+    func configureDataSource() {
+        dataSource = TagDataSource(tableView: tagTableView) { (tableView: UITableView, indexPath: IndexPath, tag: Tag) ->
+            UITableViewCell? in
+            let cell = tableView.dequeueReusableCell(withIdentifier: "tagCell", for: indexPath)
+            
+            cell.textLabel?.textAlignment = .left
+            cell.textLabel?.lineBreakMode = .byTruncatingTail
+            cell.textLabel?.font = UIFont.preferredFont(forTextStyle: .title3)
+            cell.textLabel?.numberOfLines = 0
+            cell.textLabel?.text = tag.name
+            
+            return cell
+        }
+    }
+    
     private func applySnapshot() {
-        var currentSnapshot = NSDiffableDataSourceSnapshot<TagSection, TagEntity>()
+        var currentSnapshot = NSDiffableDataSourceSnapshot<TagSection, Tag>()
         currentSnapshot.appendSections([.main])
-        currentSnapshot.appendItems(fetchedResultsController.fetchedObjects ?? [])
+        currentSnapshot.appendItems(tags)
         dataSource?.apply(currentSnapshot)
     }
 
@@ -97,7 +88,66 @@ class TagListViewController: UIViewController {
         } catch let error as NSError {
             completion(.failure(error))
         }
-    }    
+    }
+    
+    func showAlert(tagName: String = "") {
+        let alert = UIAlertController(
+            title: "Title here",
+            message: "message",
+            preferredStyle: .alert
+        )
+        
+        let cancelAction = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        alert.addTextField { textField in
+            textField.text = tagName
+        }
+        let action = UIAlertAction(
+            title: "Ok",
+            style: .default,
+            handler: { [weak self] action in
+                guard let tag = alert.textFields?.first?.text else { return }
+                guard let self = self else { return }
+                
+                if tagName.isEmpty {
+                    self.tags.append(Tag(name: tag.trimmingCharacters(in: .whitespacesAndNewlines)))
+                } else if self.canAddTag(name: tag) {
+                    if let index = self.tags.firstIndex(where: { $0.name == tagName}) {
+                        self.tags[index].name = tag
+                    }
+                } else {
+                    return
+                }
+                
+//                self.applySnapshot()
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+        )
+        
+        alert.addAction(cancelAction)
+        alert.addAction(action)
+
+        present(alert, animated: true, completion: nil)
+    }
+    
+    func canAddTag(name: String) -> Bool {
+        var isDuplicated = true
+
+        if let _ = tags.first(where: { $0.name == name }) {
+            isDuplicated = false
+        }
+        
+        return isDuplicated
+    }
+    
+    @objc func didTapAddTag() {
+        showAlert()
+    }
+    
+    @objc func didTapClose() {
+        self.dismiss(animated: true, completion: nil)
+    }
 }
 
 // MARK: - TableView Delegate
@@ -107,21 +157,16 @@ extension TagListViewController: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { (contextualAction, view, completionHandler) in
+        let deleteAction = UIContextualAction(style: .destructive, title: "Delete") { [weak self] (contextualAction, view, completionHandler) in
+            guard let self = self else { return }
             guard let tag = self.dataSource?.itemIdentifier(for: indexPath) else { return }
+
+            var currentSnapshot = self.dataSource.snapshot()
+            currentSnapshot.deleteItems([tag])
+            self.dataSource.apply(currentSnapshot)
+            self.tags =  currentSnapshot.itemIdentifiers
             
-            self.delete(tag: tag) { (result) in
-                switch result {
-                    case .success(let isTagDeleted):
-                        if isTagDeleted {
-                            print("deleted")
-                            self.applySnapshot()
-                            completionHandler(true)
-                        }
-                    case .failure(let error):
-                        print("error \(error)")
-                }
-            }
+            completionHandler(true)
         }
 
         deleteAction.backgroundColor = .systemRed
@@ -130,16 +175,16 @@ extension TagListViewController: UITableViewDelegate {
         swipeConfiguration.performsFirstActionWithFullSwipe = true
         return swipeConfiguration
     }
-}
-
-// MARK: - NSFetchedResultsController Delegate
-extension TagListViewController: NSFetchedResultsControllerDelegate {
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChangeContentWith snapshot: NSDiffableDataSourceSnapshotReference) {
-        applySnapshot()
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let tag = dataSource.itemIdentifier(for: indexPath) else { return }
+        showAlert(tagName: tag.name)
     }
+    
 }
 
-class TagDataSource: UITableViewDiffableDataSource<TagSection, TagEntity> {
+// MARK: - Data Source
+class TagDataSource: UITableViewDiffableDataSource<TagSection, Tag> {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         return true
     }
@@ -148,3 +193,8 @@ class TagDataSource: UITableViewDiffableDataSource<TagSection, TagEntity> {
 enum TagSection {
     case main
 }
+
+var mockDatas: [Tag] = [
+    Tag(name: "James"),
+    Tag(name: "Alexa")
+]

@@ -16,12 +16,5 @@ class ColorCollectionViewCell: UICollectionViewCell {
     
     func set(color: UIColor) {
         layer.backgroundColor = color.cgColor
-//        if color.name == selected.name {
-//            self.layer.borderColor = UIColor.darkGray.cgColor
-//            self.layer.borderWidth = 2
-//        } else {
-//            self.layer.borderColor = nil
-//            self.layer.borderWidth = 0
-//        }
     }
 }

@@ -2,7 +2,7 @@
 //  NoteEntity+CoreDataClass.swift
 //  NotesApp
 //
-//  Created by Obed Garcia on 5/5/21.
+//  Created by Obed Garcia on 5/9/21.
 //
 //
 
