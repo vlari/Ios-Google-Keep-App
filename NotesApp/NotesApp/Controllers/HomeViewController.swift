@@ -20,7 +20,8 @@ class HomeViewController: UIViewController {
     
     private func configure() {
         view.backgroundColor = .systemBackground
-        UINavigationBar.appearance().tintColor = UIColor.darkGray
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor(hex: "#FFC0C7")!]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor(hex: "#FFC0C7")!]
         let navMenuButton = UIBarButtonItem(image: UIImage(systemName: "list.dash"), style: .done, target: self, action: #selector(didTapNavMenu))
         navigationItem.leftBarButtonItem = navMenuButton
         navigationController?.navigationBar.prefersLargeTitles = true

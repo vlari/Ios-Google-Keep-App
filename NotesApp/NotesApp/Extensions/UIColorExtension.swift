@@ -11,15 +11,15 @@ import UIKit
 extension UIColor {
     
     struct NoteColor {
-        static var yellow = UIColor(red: 255/255, green: 244/255, blue: 117/255, alpha: 1.0)
-        static var cyan = UIColor(red: 167/255, green: 244/255, blue: 235/255, alpha: 1.0)
-        static var red = UIColor(red: 225/255, green: 130/255, blue: 121/255, alpha: 1.0)
-        static var green = UIColor(red: 204/255, green: 255/255, blue: 144/255, alpha: 1.0)
-        static var lightPurple = UIColor(red: 232/255, green: 234/255, blue: 237/255, alpha: 1.0)
-        static var purple = UIColor(red: 215/255, green: 174/255, blue: 251/255, alpha: 1.0)
-        static var orange = UIColor(red: 251/255, green: 188/255, blue: 4/255, alpha: 1.0)
-        static var pink = UIColor(red: 253/255, green: 207/255, blue: 232/255, alpha: 1.0)
-        static var blue = UIColor(red: 203/255, green: 240/255, blue: 248/255, alpha: 1.0)
+        static var yellow = UIColor(red: 255/255, green: 251/255, blue: 179/255, alpha: 1.0)
+        static var cyan = UIColor(red: 187/255, green: 247/255, blue: 241/255, alpha: 1.0)
+        static var red = UIColor(red: 225/255, green: 160/255, blue: 153/255, alpha: 1.0)
+        static var green = UIColor(red: 219/255, green: 255/255, blue: 179/255, alpha: 1.0)
+        static var lightPurple = UIColor(red: 241/255, green: 242/255, blue: 244/255, alpha: 1.0)
+        static var purple = UIColor(red: 231/255, green: 206/255, blue: 253/255, alpha: 1.0)
+        static var orange = UIColor(red: 253/255, green: 229/255, blue: 155/255, alpha: 1.0)
+        static var pink = UIColor(red: 254/255, green: 231/255, blue: 243/255, alpha: 1.0)
+        static var blue = UIColor(red: 210/255, green: 242/255, blue: 249/255, alpha: 1.0)
     }
     
     // Extracted from hackingwithswift.com

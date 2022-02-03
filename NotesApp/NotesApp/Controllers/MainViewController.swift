@@ -77,7 +77,7 @@ class MainViewController: UIViewController {
         case closed
     }
     
-    func setDisplayedView(menuItem: NavBarViewController.NavMenuItems) {
+    func setDisplayedView(menuItem: NavBarViewController.NavMenuItem) {
         switch menuItem {
         case .noteList:
             noteListVC.managedContext = self.managedContext
@@ -163,7 +163,7 @@ extension MainViewController: NoteListViewDelegate {
 
 // MARK: - Navbar Delegate
 extension MainViewController: NavBarViewControllerDelegate {
-    func didSelectNavItem(menuItem: NavBarViewController.NavMenuItems) {
+    func didSelectNavItem(menuItem: NavBarViewController.NavMenuItem) {
         toggleMenu(completion: nil)
         setDisplayedView(menuItem: menuItem)
     }

@@ -29,6 +29,8 @@
 		83550C4E263A39790054496E /* NotesAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83550C4D263A39790054496E /* NotesAppUITests.swift */; };
 		83550C66263A3ACD0054496E /* NoteListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83550C65263A3ACD0054496E /* NoteListViewController.swift */; };
 		83550C73263A41FC0054496E /* NoteCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83550C72263A41FC0054496E /* NoteCollectionViewCell.swift */; };
+		838119B127A5D69900EC5914 /* NavBarViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838119B027A5D69900EC5914 /* NavBarViewControllerTests.swift */; };
+		838119B527A5E2BB00EC5914 /* TagListViewControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838119B427A5E2BB00EC5914 /* TagListViewControllerTests.swift */; };
 		83C5138726E51538002E3593 /* NoteEntity+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C5138526E51538002E3593 /* NoteEntity+CoreDataClass.swift */; };
 		83C5138826E51538002E3593 /* NoteEntity+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C5138626E51538002E3593 /* NoteEntity+CoreDataProperties.swift */; };
 		83D1CD9A2647781C009D33FB /* UIColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D1CD992647781C009D33FB /* UIColorExtension.swift */; };
@@ -82,6 +84,8 @@
 		83550C4F263A39790054496E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		83550C65263A3ACD0054496E /* NoteListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteListViewController.swift; sourceTree = "<group>"; };
 		83550C72263A41FC0054496E /* NoteCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoteCollectionViewCell.swift; sourceTree = "<group>"; };
+		838119B027A5D69900EC5914 /* NavBarViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarViewControllerTests.swift; sourceTree = "<group>"; };
+		838119B427A5E2BB00EC5914 /* TagListViewControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagListViewControllerTests.swift; sourceTree = "<group>"; };
 		83C5138526E51538002E3593 /* NoteEntity+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteEntity+CoreDataClass.swift"; sourceTree = "<group>"; };
 		83C5138626E51538002E3593 /* NoteEntity+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NoteEntity+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		83D1CD992647781C009D33FB /* UIColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIColorExtension.swift; sourceTree = "<group>"; };
@@ -196,6 +200,7 @@
 		83550C41263A39790054496E /* NotesAppTests */ = {
 			isa = PBXGroup;
 			children = (
+				838119AF27A5D67A00EC5914 /* Controllers */,
 				83550C42263A39790054496E /* NotesAppTests.swift */,
 				83550C44263A39790054496E /* Info.plist */,
 			);
@@ -233,6 +238,31 @@
 				831D6024263B762300B6111F /* ColorCollectionViewController.swift */,
 			);
 			path = UIComponents;
+			sourceTree = "<group>";
+		};
+		838119AF27A5D67A00EC5914 /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				838119B327A5DF5C00EC5914 /* Note */,
+				838119B227A5DF5600EC5914 /* Tag */,
+				838119B027A5D69900EC5914 /* NavBarViewControllerTests.swift */,
+			);
+			path = Controllers;
+			sourceTree = "<group>";
+		};
+		838119B227A5DF5600EC5914 /* Tag */ = {
+			isa = PBXGroup;
+			children = (
+				838119B427A5E2BB00EC5914 /* TagListViewControllerTests.swift */,
+			);
+			path = Tag;
+			sourceTree = "<group>";
+		};
+		838119B327A5DF5C00EC5914 /* Note */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Note;
 			sourceTree = "<group>";
 		};
 		83B13D622642EB5900F266F8 /* Data */ = {
@@ -432,7 +462,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				838119B127A5D69900EC5914 /* NavBarViewControllerTests.swift in Sources */,
 				83550C43263A39790054496E /* NotesAppTests.swift in Sources */,
+				838119B527A5E2BB00EC5914 /* TagListViewControllerTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -601,7 +633,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Myself.NotesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -619,7 +651,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = Myself.NotesApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

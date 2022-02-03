@@ -8,13 +8,13 @@
 import UIKit
 
 protocol NavBarViewControllerDelegate: AnyObject {
-    func didSelectNavItem(menuItem: NavBarViewController.NavMenuItems)
+    func didSelectNavItem(menuItem: NavBarViewController.NavMenuItem)
 }
 
 class NavBarViewController: UIViewController {
     weak var delegate: NavBarViewControllerDelegate?
 
-    private let tableView: UITableView = {
+    let tableView: UITableView = {
         let table = UITableView()
         table.backgroundColor = .darkGray
         table.separatorStyle = .none
@@ -54,7 +54,7 @@ class NavBarViewController: UIViewController {
         ])
     }
     
-    enum NavMenuItems: String, CaseIterable {
+    enum NavMenuItem: String, CaseIterable {
         case noteList = "Notes"
         case settings = "Settings"
         
@@ -72,23 +72,23 @@ class NavBarViewController: UIViewController {
 // MARK: - TableView Delegate
 extension NavBarViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return NavMenuItems.allCases.count
+        return NavMenuItem.allCases.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "navItemCell", for: indexPath)
-        cell.textLabel?.text = NavMenuItems.allCases[indexPath.row].rawValue
-        cell.textLabel?.textColor =  UIColor(hex: "#fad0c9")
+        cell.textLabel?.text = NavMenuItem.allCases[indexPath.row].rawValue
+        cell.textLabel?.textColor =  UIColor(hex: "#ffc0c7")
         cell.backgroundColor = .darkGray
         cell.contentView.backgroundColor = .darkGray
-        cell.imageView?.image = UIImage(systemName: NavMenuItems.allCases[indexPath.row].navItemIcon)
-        cell.imageView?.tintColor = UIColor(hex: "#fad0c9")
+        cell.imageView?.image = UIImage(systemName: NavMenuItem.allCases[indexPath.row].navItemIcon)
+        cell.imageView?.tintColor = UIColor(hex: "#ffc0c7")
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        let item = NavMenuItems.allCases[indexPath.row]
+        let item = NavMenuItem.allCases[indexPath.row]
         delegate?.didSelectNavItem(menuItem: item)
     }
 }

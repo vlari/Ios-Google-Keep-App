@@ -1,5 +1,7 @@
-# Ios Notes App
+# Quick Notes
 
 <p>&nbsp;</p>
 
-![](images/IosNotesApp.gif)
+![](images/demo.png)
+
+<p>&nbsp;</p>

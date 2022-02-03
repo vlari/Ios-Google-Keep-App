@@ -14,7 +14,7 @@ protocol TagListViewDelegate: AnyObject {
 
 class TagListViewController: UIViewController {
     var managedContext: NSManagedObjectContext!
-    private var tagTableView = UITableView()
+    var tagTableView = UITableView()
     private var dataSource: TagDataSource!
     var tags = [Tag]()
     
